@@ -10,6 +10,14 @@
   <title>Side Effect - Software Development</title>
 
   <style>
+    :root {
+      --text-color-secondary: #3b444b;
+
+      --logo-text-color: #0e1111;
+      --logo-symbol-bg-color: red;
+      --logo-symbol-fg-color: #fff;
+    }
+
     body {
       margin: 0;
       font-family: "Roboto", sans-serif;
@@ -27,7 +35,6 @@
 
     .logo {
       display: flex;
-      font-weight: 300;
       font-size: 3rem;
       text-transform: uppercase;
     }
@@ -39,30 +46,29 @@
     .logo__mark {
       width: 2.5rem;
       margin-left: 6px;
-      color: #0e1111;
     }
 
     .logo__symbol__bg {
-      fill: red;
+      fill: var(--logo-symbol-bg-color)
     }
 
     .logo__symbol__fg {
-      fill: white;
+      fill: var(--logo-symbol-fg-color)
     }
 
     .byline {
       font-size: 1.5rem;
-      color: #3b444b;
+      color: var(--text-color-secondary);
     }
 
     .contact {
-      margin-top: 2rem;
       width: 90%;
+      margin-top: 2rem;
       text-align: center;
     }
 
     .contact a {
-      color: #3b444b;
+      color: var(--text-color-secondary);
     }
   </style>
   <link rel="icon" href="favicon.ico" type="image/x-icon">
