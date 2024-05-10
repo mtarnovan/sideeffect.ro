@@ -12,10 +12,40 @@
   <style>
     :root {
       --text-color-secondary: #3b444b;
+      --text-color-muted: #606060;
 
       --logo-text-color: #0e1111;
       --logo-symbol-bg-color: red;
       --logo-symbol-fg-color: #fff;
+
+      --logo-font-size: 12vw;
+      --byline-font-size: calc(var(--logo-font-size) / 2);
+      --contact-font-size: calc(var(--logo-font-size) / 3);
+    }
+
+    @media screen and (min-width: 801px) {
+      :root {
+        --logo-font-size: 6vw;
+        --byline-font-size: calc(var(--logo-font-size) / 3);
+        --contact-font-size: calc(var(--logo-font-size) / 4);
+      }
+    }
+
+    @media screen and (min-width: 1600px) {
+      :root {
+        --logo-font-size: 4vw;
+        --byline-font-size: calc(var(--logo-font-size) / 3);
+        --contact-font-size: calc(var(--logo-font-size) / 4);
+      }
+    }
+
+
+    a {
+      color: inherit;
+
+      &:hover {
+        color: var(--logo-symbol-bg-color);
+      }
     }
 
     body {
@@ -35,7 +65,6 @@
 
     .logo {
       display: flex;
-      font-size: 3rem;
       text-transform: uppercase;
     }
 
@@ -44,20 +73,27 @@
     }
 
     .logo__mark {
-      width: 2.5rem;
       margin-left: 6px;
     }
 
+    .logo {
+      font-size: var(--logo-font-size);
+    }
+
+    .logo__mark {
+      width: var(--logo-font-size);
+    }
+
     .logo__symbol__bg {
-      fill: var(--logo-symbol-bg-color)
+      fill: var(--logo-symbol-bg-color);
     }
 
     .logo__symbol__fg {
-      fill: var(--logo-symbol-fg-color)
+      fill: var(--logo-symbol-fg-color);
     }
 
     .byline {
-      font-size: 1.5rem;
+      font-size: var(--byline-font-size);
       color: var(--text-color-secondary);
     }
 
@@ -65,10 +101,9 @@
       width: 90%;
       margin-top: 2rem;
       text-align: center;
-    }
-
-    .contact a {
-      color: var(--text-color-secondary);
+      color: var(--text-color-muted);
+      font-size: var(--contact-font-size);
+      line-height: 1.66;
     }
   </style>
   <link rel="icon" href="favicon.ico" type="image/x-icon">
