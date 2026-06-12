@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Side Effect — software development practice</title>
+<meta name="description" content="Side Effect SRL — a software development practice. Every interaction has a side effect.">
+<link id="fav" rel="icon" href="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Fragment+Mono:ital@0;1&display=swap" rel="stylesheet">
+<style>:root{--void: #6AD28E;--bone: #F4F1EC;--red: #000000;--dim: rgba(244, 241, 236, .44);--faint: rgba(244, 241, 236, .22);--mono: "Fragment Mono", ui-monospace, monospace;--serif: "Instrument Serif", Georgia, serif}*{margin:0;padding:0;box-sizing:border-box}html{background:var(--void)}body{background:var(--void);color:var(--bone);font-family:var(--mono);overflow-x:hidden}::selection{background:var(--red);color:var(--void)}@media (hover: hover) and (pointer: fine){html,body,a{cursor:none}}#gl{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}.track{position:relative;z-index:1;pointer-events:none}.scene{height:100vh}.ui{position:fixed;inset:0;z-index:2;pointer-events:none;font-size:11px;letter-spacing:.14em;text-transform:uppercase;line-height:1.7}.ui a{pointer-events:auto;color:var(--red);text-decoration:none}.ui a:hover{color:var(--bone)}.brand{position:absolute;top:28px;left:32px;color:var(--dim)}.brand b{color:var(--bone);font-weight:400}.brand svg{width:15px;height:15px;vertical-align:-3.5px;margin-right:9px}.counter{position:absolute;top:28px;right:32px;color:var(--faint)}.counter b{color:var(--red);font-weight:400}.labels{position:absolute;left:32px;bottom:30px;max-width:46ch}.lab{position:absolute;left:0;bottom:0;white-space:nowrap;color:var(--dim);opacity:0;transform:translateY(8px);transition:opacity .7s ease,transform .7s ease}.lab .ast{color:var(--red)}.lab.on{opacity:1;transform:translateY(0)}.lab small{display:block;font-size:10px;color:var(--faint);text-transform:none;letter-spacing:.1em}.hint{position:absolute;left:50%;bottom:26px;transform:translate(-50%);color:var(--faint)}.hint i{display:inline-block;font-style:normal;animation:sink 1.8s ease-in-out infinite}@keyframes sink{0%,to{transform:translateY(-2px);opacity:.4}50%{transform:translateY(3px);opacity:1}}.year{position:absolute;right:32px;bottom:30px;color:var(--faint);font-size:10px}@media (max-width: 720px){.brand{left:20px;top:20px}.counter{right:20px;top:20px}.labels{left:20px;bottom:24px}.lab{white-space:normal;width:max-content;max-width:72vw}.year{right:20px;bottom:24px}.hint{display:none}.ui{font-size:10px}}#cur{position:fixed;top:0;left:0;width:30px;height:30px;margin:-15px 0 0 -15px;z-index:10;pointer-events:none;opacity:0}#cur svg{display:block;width:100%;height:100%}@media (hover: none),(pointer: coarse){#cur{display:none}}#panel{position:fixed;top:60px;right:32px;z-index:30;width:216px;max-height:calc(100vh - 84px);overflow:auto;background:#060404d9;border:1px solid rgba(244,241,236,.14);backdrop-filter:blur(6px);padding:13px 15px;font-size:10px;line-height:1.6;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);cursor:auto}#panel h4{color:var(--bone);font-weight:400;font-size:10px;margin:11px 0 4px}#panel h4:first-child{margin-top:0}#panel .row{display:flex;align-items:center;gap:8px;margin:3px 0}#panel .row label{flex:0 0 64px}#panel input[type=range]{flex:1;accent-color:var(--red)}#panel input[type=color]{width:40px;height:18px;padding:0;border:1px solid rgba(244,241,236,.22);background:none}#panel .val{flex:0 0 32px;text-align:right;color:var(--bone)}.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}#fallback{display:none;position:relative;z-index:3;min-height:100vh;padding:18vh 8vw;background:var(--void)}#fallback p{font-family:var(--serif);font-style:italic;font-size:clamp(28px,6vw,72px);line-height:1.1;margin-bottom:.8em}#fallback .fred{color:var(--red)}#fallback footer{margin-top:8vh;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}body.no-gl #fallback{display:block}body.no-gl .track,body.no-gl .ui,body.no-gl #gl,body.no-gl #cur{display:none}</style>
+</head>
+<body>
+<h1 class="sr">Side Effect — a software development practice. Pure functions don't change the world. Side effects do. We build software that leaves a mark. Web, systems, agentic engineering. hello@sideeffect.ro</h1>
+<canvas id="gl" aria-hidden="true"></canvas>
+<div class="track" aria-hidden="true">
+<section class="scene"></section>
+<section class="scene"></section>
+<section class="scene"></section>
+<section class="scene"></section>
+</div>
+<div class="ui">
+<div class="brand"><svg viewBox="0 0 96 96" aria-hidden="true"><mask id="lm"><path fill="#fff" d="M95.813 46.562C95.813 71.68 74.5091 92.0422 48.2294 92.0422C21.9497 92.0422 0.645782 71.68 0.645782 46.562C0.645782 21.444 21.9497 1.08179 48.2294 1.08179C74.5091 1.08179 95.813 21.444 95.813 46.562Z"/><path fill="#000" d="M45.4339 28.5033L48.3057 25.1258C49.8851 23.2685 51.1124 21.5731 51.0327 21.3584C50.6054 20.2077 46.2784 16.8733 43.3142 15.4109C37.8309 12.7055 33.291 12.5371 26.9952 14.8045C23.6988 15.9918 23.267 16.2499 20.8406 18.4841C15.2343 23.6464 13.5705 30.0391 15.9838 37.1459C17.4892 41.5796 20.6339 45.2319 25.0461 47.6715L27.3388 48.9393L28.7597 47.4365C31.2613 44.7905 33.4164 42.2066 33.3331 41.9525C33.2886 41.8166 32.7166 41.6224 32.0613 41.5204C30.2277 41.2352 26.5068 39.0205 25.4793 37.6026C24.0422 35.6198 23.0292 32.2042 23.2666 30.1425C23.763 25.8287 26.5302 22.5575 30.7783 21.2618C36.3149 19.5729 41.9601 21.8465 44.5491 26.8076L45.4339 28.5033Z"/><path fill="#000" d="M84.4721 38.7899C85.3782 47.0461 78.4958 55.9724 70.035 57.5142L68.2782 57.834L67.0406 54.2152L65.803 50.5967L68.91 49.6301C71.4163 48.8504 72.251 48.4331 73.2266 47.4719C75.1336 45.5926 75.9987 43.9994 76.3262 41.7646C77.1306 36.2697 73.9212 31.7045 68.4482 30.5595C66.7353 30.201 66.0883 30.2646 63.63 31.0326C60.3776 32.0488 60.8661 31.5838 51.6287 42.4651C48.9333 45.6403 44.3983 50.9219 41.5512 54.2026C38.7039 57.483 35.8895 61.0491 35.2967 62.1276C31.6127 68.8305 35.3808 76.3491 43.2605 78.0177L45.0605 78.3989L46.2243 81.8016L47.388 85.2044L46.3383 85.3239C42.4472 85.7669 37.1577 84.5897 33.7839 82.5305C26.6415 78.1701 23.6212 68.7645 26.6585 60.34C28.0549 56.4668 28.1103 56.3968 46.3209 35.5609C50.6694 30.5853 54.9205 25.9565 55.7677 25.2746C58.0365 23.4482 63.5507 21.7719 66.7018 21.9507C76.1887 22.489 83.4367 29.3571 84.4721 38.7899Z"/><path fill="#000" d="M55.5934 81.8923C60.2516 78.5263 63.0795 72.9527 62.8371 67.6145C62.5838 62.0299 60.3284 57.627 55.8964 54.0644C52.3793 51.2371 52.9736 51.161 49.5218 54.8782C46.7958 57.8135 46.0359 58.9702 47.0394 58.6567C47.6257 58.4735 50.6467 60.1052 51.8628 61.2625C53.5755 62.8918 54.7143 65.4875 54.7996 67.9564C54.8826 70.3645 53.4097 73.9402 51.631 75.648L50.4886 76.7451L51.6464 80.1305C52.9635 83.9817 52.8017 83.9094 55.5934 81.8923Z"/></mask><rect width="96" height="96" fill="var(--red)" mask="url(#lm)"/></svg><b>SIDE·EFFECT</b><span style="color:var(--faint)">®</span></div>
+<div class="counter"><b id="num">01</b> / 04</div>
+<div class="labels">
+<div class="lab" data-s="0"><span class="ast">*</span>a software development practice<small>move · click · scroll — everything here has consequences</small></div>
+<div class="lab" data-s="1">in theory</div>
+<div class="lab" data-s="2">in practice</div>
+<div class="lab" data-s="3"><a href="mailto:hello@sideeffect.ro">hello@sideeffect.ro</a><small>web · systems · agentic engineering</small></div>
+</div>
+<div class="hint">scroll <i>↓</i></div>
+<div class="year">© MMXXVI</div>
+</div>
+<div id="cur"><svg viewBox="0 0 96 96" aria-hidden="true"><rect width="96" height="96" fill="var(--red)" mask="url(#lm)"/></svg></div>
+<div id="fallback">
+<p>Side Effect<span class="fred">*</span></p>
+<p>Pure functions don't change the world.</p>
+<p class="fred">Side effects do.</p>
+<p>We build software that leaves a mark.</p>
+<footer>*a software development practice — <a href="mailto:hello@sideeffect.ro" style="color:var(--red);text-decoration:none">hello@sideeffect.ro</a> — © MMXXVI</footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js"}}</script>
+<script type="module">import*as m from"three";gsap.registerPlugin(ScrollTrigger);const C=matchMedia("(prefers-reduced-motion: reduce)").matches,w=[{lines:["Side Effect*"],size:.12},{lines:["Pure functions don't","change the world."],size:.072},{lines:["Side effects do."],size:.105,red:!0},{lines:["We build software","that leaves a mark."],size:.072}],Q="#F4F1EC",l={bg:"#6AD28E",red:"#000000",click:{count:.4,size:.6,strength:.35},scroll:{count:1.5,size:.6,strength:.6},damp:.962,refr:.07};function H(e){return new m.Vector3(parseInt(e.slice(1,3),16)/255,parseInt(e.slice(3,5),16)/255,parseInt(e.slice(5,7),16)/255)}function ee(e){return H(e).multiply(new m.Vector3(.62,.38,.2))}const _={circle:"M95.813 46.562C95.813 71.68 74.5091 92.0422 48.2294 92.0422C21.9497 92.0422 0.645782 71.68 0.645782 46.562C0.645782 21.444 21.9497 1.08179 48.2294 1.08179C74.5091 1.08179 95.813 21.444 95.813 46.562Z",glyphs:["M45.4339 28.5033L48.3057 25.1258C49.8851 23.2685 51.1124 21.5731 51.0327 21.3584C50.6054 20.2077 46.2784 16.8733 43.3142 15.4109C37.8309 12.7055 33.291 12.5371 26.9952 14.8045C23.6988 15.9918 23.267 16.2499 20.8406 18.4841C15.2343 23.6464 13.5705 30.0391 15.9838 37.1459C17.4892 41.5796 20.6339 45.2319 25.0461 47.6715L27.3388 48.9393L28.7597 47.4365C31.2613 44.7905 33.4164 42.2066 33.3331 41.9525C33.2886 41.8166 32.7166 41.6224 32.0613 41.5204C30.2277 41.2352 26.5068 39.0205 25.4793 37.6026C24.0422 35.6198 23.0292 32.2042 23.2666 30.1425C23.763 25.8287 26.5302 22.5575 30.7783 21.2618C36.3149 19.5729 41.9601 21.8465 44.5491 26.8076L45.4339 28.5033Z","M84.4721 38.7899C85.3782 47.0461 78.4958 55.9724 70.035 57.5142L68.2782 57.834L67.0406 54.2152L65.803 50.5967L68.91 49.6301C71.4163 48.8504 72.251 48.4331 73.2266 47.4719C75.1336 45.5926 75.9987 43.9994 76.3262 41.7646C77.1306 36.2697 73.9212 31.7045 68.4482 30.5595C66.7353 30.201 66.0883 30.2646 63.63 31.0326C60.3776 32.0488 60.8661 31.5838 51.6287 42.4651C48.9333 45.6403 44.3983 50.9219 41.5512 54.2026C38.7039 57.483 35.8895 61.0491 35.2967 62.1276C31.6127 68.8305 35.3808 76.3491 43.2605 78.0177L45.0605 78.3989L46.2243 81.8016L47.388 85.2044L46.3383 85.3239C42.4472 85.7669 37.1577 84.5897 33.7839 82.5305C26.6415 78.1701 23.6212 68.7645 26.6585 60.34C28.0549 56.4668 28.1103 56.3968 46.3209 35.5609C50.6694 30.5853 54.9205 25.9565 55.7677 25.2746C58.0365 23.4482 63.5507 21.7719 66.7018 21.9507C76.1887 22.489 83.4367 29.3571 84.4721 38.7899Z","M55.5934 81.8923C60.2516 78.5263 63.0795 72.9527 62.8371 67.6145C62.5838 62.0299 60.3284 57.627 55.8964 54.0644C52.3793 51.2371 52.9736 51.161 49.5218 54.8782C46.7958 57.8135 46.0359 58.9702 47.0394 58.6567C47.6257 58.4735 50.6467 60.1052 51.8628 61.2625C53.5755 62.8918 54.7143 65.4875 54.7996 67.9564C54.8826 70.3645 53.4097 73.9402 51.631 75.648L50.4886 76.7451L51.6464 80.1305C52.9635 83.9817 52.8017 83.9094 55.5934 81.8923Z"]},te={circle:new Path2D(_.circle),glyphs:_.glyphs.map(e=>new Path2D(e))};function ne(e){const i=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><mask id="m"><path fill="#fff" d="${_.circle}"/>${_.glyphs.map(o=>`<path fill="#000" d="${o}"/>`).join("")}</mask><rect width="96" height="96" fill="${e}" mask="url(#m)"/></svg>`;document.getElementById("fav").href="data:image/svg+xml,"+encodeURIComponent(i)}ne(l.red);function de(e,i,o,t){const c=t/96;e.save(),e.translate(i-t/2,o-t/2),e.scale(c,c),e.fillStyle=l.red,e.fill(te.circle),e.globalCompositeOperation="destination-out",te.glyphs.forEach(h=>e.fill(h)),e.restore()}const re=`
+  varying vec2 vUv;
+  void main() { vUv = uv; gl_Position = vec4(position, 1.0); }
+`,fe=`
+  precision highp float;
+  varying vec2 vUv;
+  uniform sampler2D uState;
+  uniform vec2 uTexel;
+  uniform float uA;      // viewport h/w \u2014 makes drop distances isotropic on screen
+  uniform float uDamp;
+  uniform vec4 uDrops[10];
+  void main() {
+    vec2 c = texture2D(uState, vUv).xy;
+    float l = texture2D(uState, vUv - vec2(uTexel.x, 0.0)).x;
+    float r = texture2D(uState, vUv + vec2(uTexel.x, 0.0)).x;
+    float d = texture2D(uState, vUv - vec2(0.0, uTexel.y)).x;
+    float u = texture2D(uState, vUv + vec2(0.0, uTexel.y)).x;
+    float nh = (l + r + u + d) * 0.5 - c.y;
+    nh *= uDamp;
+    vec2 p = vec2(vUv.x, vUv.y * uA);
+    for (int i = 0; i < 10; i++) {
+      vec4 dr = uDrops[i];
+      if (dr.w != 0.0) {
+        float dist = length(p - dr.xy);
+        nh += dr.w * exp(-dist * dist / (dr.z * dr.z));
+      }
+    }
+    gl_FragColor = vec4(nh, c.x, 0.0, 1.0);
+  }
+`,me=`
+  precision highp float;
+  varying vec2 vUv;
+  uniform sampler2D uField;
+  uniform sampler2D uTextA;
+  uniform sampler2D uTextB;
+  uniform vec2 uTexel;
+  uniform vec2 uRes;
+  uniform float uA;
+  uniform float uTime;
+  uniform float uMixT;
+  uniform vec3 uMouse;   // x, y width-normalized; z = activity
+  uniform vec3 uRed;
+  uniform vec3 uEmber;
+  uniform vec3 uBg;
+  uniform float uRefr;
+
+  float fh(vec2 uv) { return texture2D(uField, uv).x; }
+  float hash(vec2 q) { return fract(sin(dot(q, vec2(127.1, 311.7))) * 43758.5453); }
+
+  void main() {
+    vec2 uv = vUv;
+    float l = fh(uv - vec2(uTexel.x, 0.0));
+    float r = fh(uv + vec2(uTexel.x, 0.0));
+    float d = fh(uv - vec2(0.0, uTexel.y));
+    float u = fh(uv + vec2(0.0, uTexel.y));
+    float h = fh(uv);
+    vec2 grad = vec2(r - l, u - d);
+    vec2 off = grad * uRefr;
+
+    vec3 red   = uRed;
+    vec3 ember = uEmber;
+    vec3 col   = uBg * 0.6;
+
+    // cursor presence \u2014 a faint lamp under the surface
+    vec2 p = vec2(uv.x, uv.y * uA);
+    float md = length(p - uMouse.xy);
+    col += red * exp(-md * md * 700.0) * 0.12 * uMouse.z;
+
+    // wakes: gradient \u2192 caustic ridge light, amplitude \u2192 ember body
+    float g = length(grad);
+    col += red * pow(min(g * 5.0, 1.0), 1.8) * 0.8;
+    col += ember * abs(h) * 0.8;
+
+    // vignette + filmic curve (background only \u2014 keeps type at exact brand color)
+    float vd = length(vec2(uv.x - 0.5, (uv.y - 0.5) * 0.9));
+    col *= 1.0 - 0.55 * smoothstep(0.34, 0.82, vd);
+    col = 1.0 - exp(-col * 1.7);
+
+    // typography lives inside the field \u2014 refracted by your consequences
+    vec2 tuv = uv + off;
+    vec4 tA = texture2D(uTextA, tuv);
+    vec4 tB = texture2D(uTextB, tuv);
+    vec4 tx = mix(tA, tB, uMixT);
+    float bright = 0.95 + h * 1.5;
+    col = col * (1.0 - tx.a * 0.5) + tx.rgb * bright * tx.a;
+    // chromatic ghost on the wavefront
+    vec2 goff = grad * uRefr * 2.7;
+    float ga = mix(texture2D(uTextA, tuv + goff).a,
+                   texture2D(uTextB, tuv + goff).a, uMixT);
+    col += red * max(ga - tx.a, 0.0) * 0.45;
+
+    col += (hash(uv * uRes + fract(uTime) * 113.0) - 0.5) * 0.035;
+
+    gl_FragColor = vec4(col, 1.0);
+  }
+`;let s=innerWidth,f=innerHeight;const b=Math.min(devicePixelRatio||1,2);let M,X,N,Z,F,u,E,Y,A,B;const y=[];let U=0;const W=[];let $=0,G=0;function I(e,i,o,t){W.push({x:e/s,y:(1-i/f)*(f/s),r:o,s:t})}function oe(){A=s<720?384:512,B=Math.max(64,Math.round(A*f/s));const e={type:m.HalfFloatType,format:m.RGBAFormat,minFilter:m.LinearFilter,magFilter:m.LinearFilter,depthBuffer:!1,stencilBuffer:!1};E&&(E.dispose(),Y.dispose()),E=new m.WebGLRenderTarget(A,B,e),Y=new m.WebGLRenderTarget(A,B,e)}function ae(e){return`italic 400 ${e}px "Instrument Serif"`}function D(e,i){const{cnv:o,ctx:t}=e;o.width=Math.round(s*b),o.height=Math.round(f*b),t.setTransform(b,0,0,b,0,0),t.clearRect(0,0,s,f);let c=i.size*s*(s<720?1.55:1);c=Math.min(c,f*.2),t.font=ae(c);let h=0;for(const d of i.lines)h=Math.max(h,t.measureText(d).width);h>s*.92&&(c*=s*.92/h,t.font=ae(c)),t.textBaseline="middle";const v=c*1.06,r=f*.46-(i.lines.length-1)*v/2;i.lines.forEach((d,g)=>{const L=r+g*v;if(d.includes("*")){const R=d.replace("*",""),x=t.measureText(R).width,k=c*.46,n=c*.12,T=(s-x-n-k)/2;t.textAlign="left",t.fillStyle=i.red?l.red:Q,t.fillText(R,T,L),de(t,T+x+n+k/2,L-c*.28,k)}else t.textAlign="center",t.fillStyle=i.red?l.red:Q,t.fillText(d,s/2,L)}),e.tex.needsUpdate=!0}function ve(){const e=document.getElementById("gl");if(M=new m.WebGLRenderer({canvas:e,antialias:!1,alpha:!1}),!M.capabilities.isWebGL2||!M.extensions.has("EXT_color_buffer_float"))throw new Error("no float render targets");M.setPixelRatio(b),M.setSize(s,f),X=new m.OrthographicCamera(-1,1,1,-1,0,1),oe();const i=Array.from({length:10},()=>new m.Vector4(0,0,1,0));F=new m.ShaderMaterial({vertexShader:re,fragmentShader:fe,uniforms:{uState:{value:null},uTexel:{value:new m.Vector2(1/A,1/B)},uA:{value:f/s},uDamp:{value:l.damp},uDrops:{value:i}},depthTest:!1});for(let t=0;t<2;t++){const c=document.createElement("canvas"),h=c.getContext("2d"),v=new m.CanvasTexture(c);v.minFilter=m.LinearFilter,v.magFilter=m.LinearFilter,v.generateMipmaps=!1,y.push({cnv:c,ctx:h,tex:v})}u=new m.ShaderMaterial({vertexShader:re,fragmentShader:me,uniforms:{uField:{value:E.texture},uTextA:{value:y[0].tex},uTextB:{value:y[1].tex},uTexel:{value:new m.Vector2(1/A,1/B)},uRes:{value:new m.Vector2(s*b,f*b)},uA:{value:f/s},uTime:{value:0},uMixT:{value:0},uMouse:{value:new m.Vector3(-10,-10,0)},uRed:{value:H(l.red)},uEmber:{value:ee(l.red)},uBg:{value:H(l.bg)},uRefr:{value:l.refr}},depthTest:!1});const o=new m.PlaneGeometry(2,2);N=new m.Scene,N.add(new m.Mesh(o,F)),Z=new m.Scene,Z.add(new m.Mesh(o,u)),D(y[0],w[0]),D(y[1],w[0])}function le(e){const i=F.uniforms.uDrops.value;if(e){for(let o=0;o<10;o++)if(o<W.length){const t=W[o];i[o].set(t.x,t.y,t.r,t.s)}else i[o].set(0,0,1,0);W.length=0}else for(let o=0;o<10;o++)i[o].set(0,0,1,0);F.uniforms.uState.value=E.texture,M.setRenderTarget(Y),M.render(N,X),[E,Y]=[Y,E]}function O(e){u.uniforms.uTime.value=e,$*=.96,u.uniforms.uMouse.value.z=$,le(!0),le(!1),u.uniforms.uField.value=E.texture,M.setRenderTarget(null),M.render(Z,X)}function pe(e,i,o,t,c,h){for(let v=0;v<t;v++){const r=v/t*Math.PI*2+Math.random()*.5;I(e+Math.cos(r)*o,i+Math.sin(r)*o,h,c*(.75+Math.random()*.5))}}function ie(e,i){const o=l.click;I(e,i,.014*o.size,-.5*o.strength);const t=(c,h,v,r)=>{v=Math.round(v*o.count),v>0&&gsap.delayedCall(c,()=>pe(e,i,h,v,r*o.strength,.011*o.size))};t(.18,Math.min(s,f)*.1,5,-.2),t(.44,Math.min(s,f)*.24,8,-.13),t(.74,Math.min(s,f)*.42,10,-.08)}function ge(){const e=l.scroll,i=Math.round(6*e.count),o=f*.46;for(let t=0;t<i;t++)gsap.delayedCall(t*.055,()=>I(s*(.16+.68*t/Math.max(i-1,1)),o+(Math.random()-.5)*f*.14,.011*e.size,-.1*e.strength))}const j=[...document.querySelectorAll(".lab")],se=document.getElementById("num");function K(e,i=!1){if(e===G&&!i)return;G=e,j.forEach((t,c)=>t.classList.toggle("on",c===e)),se.textContent=String(e+1).padStart(2,"0"),C||gsap.fromTo(se,{opacity:.15},{opacity:1,duration:.6});const o=y[U^1];if(D(o,w[e]),C||i){D(y[U],w[e]),gsap.killTweensOf(u.uniforms.uMixT),u.uniforms.uMixT.value=0,C&&O(u.uniforms.uTime.value);return}gsap.killTweensOf(u.uniforms.uMixT),u.uniforms.uMixT.value=0,gsap.to(u.uniforms.uMixT,{value:1,duration:1,ease:"power2.inOut",onComplete(){U^=1,u.uniforms.uTextA.value=y[U].tex,u.uniforms.uTextB.value=y[U^1].tex,u.uniforms.uMixT.value=0}}),ge()}try{ve()}catch{document.body.classList.add("no-gl")}if(!document.body.classList.contains("no-gl")){if(Promise.all([document.fonts.load('italic 400 100px "Instrument Serif"'),document.fonts.load('400 100px "Fragment Mono"')]).then(()=>{D(y[0],w[0]),D(y[1],w[0]),C?(K(0,!0),j[0].classList.add("on"),O(0)):(j[0].classList.add("on"),gsap.delayedCall(.55,()=>ie(s*.5,f*.44)),gsap.from(".ui > *",{autoAlpha:0,y:8,duration:1.1,stagger:.09,delay:.25,ease:"power2.out"}))}),!C){const r=new m.Clock;let d=3.5;M.setAnimationLoop(()=>{const g=r.getElapsedTime();g>d&&(d=g+2.2+Math.random()*2.8,I(Math.random()*s,Math.random()*f,.009,-.1)),O(g)})}const e=document.getElementById("cur"),i=gsap.quickTo(e,"x",{duration:.16,ease:"power2.out"}),o=gsap.quickTo(e,"y",{duration:.16,ease:"power2.out"});let t=null,c=null,h=0;if(addEventListener("pointermove",r=>{if(i(r.clientX),o(r.clientY),e.style.opacity!=="1"&&(e.style.opacity="1"),u.uniforms.uMouse.value.set(r.clientX/s,(1-r.clientY/f)*(f/s),u.uniforms.uMouse.value.z),$=1,!C){if(t!==null){const d=Math.hypot(r.clientX-t,r.clientY-c);h+=d,h>9&&(h=0,I(r.clientX,r.clientY,.007+Math.min(d*3e-4,.007),-Math.min(.02+d*.004,.18)))}t=r.clientX,c=r.clientY}}),addEventListener("pointerdown",r=>{C||ie(r.clientX,r.clientY),gsap.fromTo(e,{scale:2.6,opacity:1},{scale:1,duration:.6,ease:"power3.out"})}),addEventListener("pointerup",r=>{r.pointerType!=="mouse"&&(t=c=null,$=0)}),addEventListener("pointercancel",()=>{t=c=null,$=0}),document.querySelectorAll(".ui a").forEach(r=>{r.addEventListener("mouseenter",()=>gsap.to(e,{scale:2.2,duration:.3})),r.addEventListener("mouseleave",()=>gsap.to(e,{scale:1,duration:.3}))}),document.querySelectorAll(".scene").forEach((r,d)=>{ScrollTrigger.create({trigger:r,start:"top 70%",end:"bottom 70%",onEnter:()=>K(d),onEnterBack:()=>K(d)})}),!C){let r=null,d=0;const g={y:0},L=()=>r&&r.isActive()&&r.progress()<.5,R=()=>Math.round(scrollY/innerHeight),x=a=>{const p=Math.min(w.length-1,Math.max(0,a))*innerHeight;p!==scrollY&&(r&&r.kill(),g.y=scrollY,r=gsap.to(g,{y:p,duration:.7,ease:"power3.out",onUpdate:()=>scrollTo(0,g.y)}))};let k=0,n=0,T=!1;addEventListener("wheel",a=>{if(a.target.closest&&a.target.closest("#panel"))return;a.preventDefault();const p=performance.now(),S=a.deltaMode===1?a.deltaY*16:a.deltaY,V=p-k,z=V>160||Math.sign(S)!==Math.sign(n)||Math.abs(S)>Math.max(20,Math.abs(n)*1.5);if(k=p,n=S,T){if(!z)return;T=!1,d=0}if(V>400&&(d=0),d+=S,Math.abs(d)>=50){T=!0;const q=d>0?1:-1;d=0,x(R()+q)}},{passive:!1}),addEventListener("keydown",a=>{if(a.target.closest&&a.target.closest("#panel"))return;let p=0;if(a.key==="ArrowDown"||a.key==="PageDown"||a.key===" "&&!a.shiftKey)p=1;else if(a.key==="ArrowUp"||a.key==="PageUp"||a.key===" "&&a.shiftKey)p=-1;else if(a.key==="Home"){a.preventDefault(),x(0);return}else if(a.key==="End"){a.preventDefault(),x(w.length-1);return}p&&(a.preventDefault(),!L()&&x(R()+p))}),ScrollTrigger.create({start:0,end:()=>ScrollTrigger.maxScroll(window),snap:{snapTo:1/(w.length-1),duration:{min:.25,max:.5},delay:.05,directional:!0,ease:"power3.out"}});let P=0;ScrollTrigger.create({onUpdate(a){const p=a.getVelocity(),S=performance.now();Math.abs(p)>500&&S-P>110&&(P=S,I(Math.random()*s,p>0?f*.92:f*.08,.018*l.scroll.size,-Math.min(Math.abs(p)/9e3,.14)*l.scroll.strength))}}),gsap.to(".hint",{autoAlpha:0,duration:.6,scrollTrigger:{start:60,end:61,toggleActions:"play none none reverse"}})}if(new URLSearchParams(location.search).has("enable_controls")){let g=function(n,T,P,a,p,S,V){const z=document.createElement("div");z.className="row",z.innerHTML=`<label>${n}</label><input type="range" min="${T}" max="${P}" step="${a}" value="${p}"><span class="val"></span>`;const q=z.querySelector("input"),ue=z.querySelector(".val"),J=ce=>{ue.textContent=S(ce)};J(p),q.addEventListener("input",()=>{J(+q.value),V(+q.value)}),r.appendChild(z)},L=function(n,T,P){const a=document.createElement("div");a.className="row",a.innerHTML=`<label>${n}</label><input type="color" value="${T}">`,a.querySelector("input").addEventListener("input",p=>P(p.target.value)),r.appendChild(a)},R=function(){gsap.killTweensOf(u.uniforms.uMixT),u.uniforms.uMixT.value=0,D(y[U],w[G]),C&&O(u.uniforms.uTime.value)};const r=document.createElement("div");r.id="panel";const d=n=>r.insertAdjacentHTML("beforeend",`<h4>${n}</h4>`),x=n=>(+n).toFixed(2),k=n=>(+n).toFixed(3);d("base"),L("background",l.bg,n=>{l.bg=n,u.uniforms.uBg.value.copy(H(n)),document.documentElement.style.background=n,document.body.style.background=n}),L("red",l.red,n=>{l.red=n,u.uniforms.uRed.value.copy(H(n)),u.uniforms.uEmber.value.copy(ee(n)),document.documentElement.style.setProperty("--red",n),ne(n),R()}),d("click"),g("drops",0,3,.1,l.click.count,x,n=>l.click.count=n),g("size",.3,3,.05,l.click.size,x,n=>l.click.size=n),g("strength",0,2.5,.05,l.click.strength,x,n=>l.click.strength=n),d("scroll"),g("drops",0,3,.1,l.scroll.count,x,n=>l.scroll.count=n),g("size",.3,3,.05,l.scroll.size,x,n=>l.scroll.size=n),g("strength",0,2.5,.05,l.scroll.strength,x,n=>l.scroll.strength=n),d("field"),g("settle",.95,.995,.001,l.damp,k,n=>{l.damp=n,F.uniforms.uDamp.value=n}),g("refraction",0,.8,.01,l.refr,x,n=>{l.refr=n,u.uniforms.uRefr.value=n}),["pointerdown","pointermove","pointerup"].forEach(n=>r.addEventListener(n,T=>T.stopPropagation())),document.body.appendChild(r)}let v;addEventListener("resize",()=>{clearTimeout(v),v=setTimeout(()=>{s=innerWidth,f=innerHeight,M.setSize(s,f),oe(),F.uniforms.uTexel.value.set(1/A,1/B),F.uniforms.uA.value=f/s,u.uniforms.uTexel.value.set(1/A,1/B),u.uniforms.uRes.value.set(s*b,f*b),u.uniforms.uA.value=f/s,gsap.killTweensOf(u.uniforms.uMixT),u.uniforms.uMixT.value=0,D(y[U],w[G]),u.uniforms.uField.value=E.texture,C&&O(u.uniforms.uTime.value),ScrollTrigger.refresh()},180)})}</script>
+</body>
+</html>
